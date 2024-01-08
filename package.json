@@ -1,7 +1,7 @@
 {
     "name": "checklist",
     "version": "1.0.0",
-    "description": "Example usage of socket-actions with Docker, Next.js and MUI.",
+    "description": "Example usage of socket-actions with Next.js and MUI.",
     "repository": "git@github.com:NDA-Software/checklist.git",
     "author": "HerrTuring <admin@nda.software>",
     "license": "MIT",
