@@ -3,17 +3,17 @@ import { Stack, Button, Input, Box } from '@mui/joy';
 
 import Checklist from '@/app/Checklist';
 
-export interface checklist {
+export type checklist = {
     title: string,
     data: item[],
 }
 
-export interface item {
+export type item = {
     text: string,
     checked: boolean
 }
 
-export interface reducerAction {
+export type reducerAction = {
     action: string,
     newTitle?: string,
     newItem?: {

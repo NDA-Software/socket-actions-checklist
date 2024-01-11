@@ -3,7 +3,7 @@ import { type ReactElement, useState, type Dispatch } from 'react';
 
 import { type item, type reducerAction } from '@/pages';
 
-interface propType {
+type propType = {
     index: number,
     title: string,
     data: item[],
