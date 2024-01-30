@@ -1,0 +1,52 @@
+{
+    "name": "socket",
+    "module": "./dist/index.mjs",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "",
+    "repository": "",
+    "author": "",
+    "license": "MIT",
+    "keywords": [
+        ""
+    ],
+    "scripts": {
+        "start": "node ./dist/index.cjs",
+        "dev": "npm run watch & nodemon ./dist/index.cjs",
+        "build": "rollup -c",
+        "watch": "rollup -c -w"
+    },
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "require": "./dist/index.mjs"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "./dist/types/index.d.ts"
+            ]
+        }
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-json": "^6.0.1",
+        "@rollup/plugin-node-resolve": "^15.1.0",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@types/node": "^20.5.2",
+        "@types/rollup-plugin-peer-deps-external": "^2.2.3",
+        "@types/validate-npm-package-license": "^3.0.1",
+        "rollup": "^3.26.2",
+        "rollup-plugin-copy": "^3.5.0",
+        "rollup-plugin-delete": "^2.0.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "typescript": "^5.2.2"
+    },
+    "peerDependencies": {
+        "socket-actions": "^1.1.0",
+        "ws": "^8.16.0"
+    }
+}

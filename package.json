@@ -6,9 +6,8 @@
     "author": "HerrTuring <admin@nda.software>",
     "license": "MIT",
     "scripts": {
-        "start": "node ",
-        "build": "rollup -c",
-        "watch": "rollup -c -w",
+        "dev:frontend": "cd ./src/next && npm run dev",
+        "dev:backend": "cd ./src/socket && npm run dev",
         "lint": "eslint src --ext .ts,.tsx",
         "lint-fix": "eslint src --ext .ts,.tsx --fix",
         "test": "jest"
