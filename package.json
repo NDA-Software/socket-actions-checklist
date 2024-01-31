@@ -7,6 +7,7 @@
     "license": "MIT",
     "scripts": {
         "install:services": "npm i && cd ./src/next && npm i && cd ../socket && npm i",
+        "dev": "npm run dev:frontend & npm run dev:backend",
         "dev:frontend": "cd ./src/next && npm run dev",
         "dev:backend": "cd ./src/socket && npm run dev",
         "lint": "eslint src --ext .ts,.tsx",

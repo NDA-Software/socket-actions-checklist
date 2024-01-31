@@ -57,9 +57,8 @@ export default function Checklist ({ index, title, data, updateLists }: propType
                 </ListItem>
 
                 {data.map((item, i) => (
-                    <ListItem sx={{ width: '100%', justifyContent: 'space-between' }}>
+                    <ListItem key={`${index}-${i}-item`} sx={{ width: '100%', justifyContent: 'space-between' }}>
                         <Checkbox
-                            key={`${index}-${i}-item`}
                             checked={item.checked}
                             onChange={() => { updateLists({ action: 'check', indexes: { list: index, item: i } }); }}
                             label={item.text}

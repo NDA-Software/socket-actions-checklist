@@ -126,10 +126,9 @@ export default function Home({ startingLists }: propType): ReactElement<any, any
             <Sheet sx={{ px: 5, py: 5, height: '100vh', width: '100vw' }}>
                 <List orientation='horizontal' sx={{ width: '100%', height: '100%', overflowX: 'auto' }}>
                     {lists.map((checklist, i) => (
-                        <ListItem sx={{ minWidth: '20%', height: '100%' }}>
+                        <ListItem key={`${i}-checklist`} sx={{ minWidth: '20%', height: '100%' }}>
                             <Checklist
                                 title={checklist.title}
-                                key={`${i}-checklist`}
                                 index={i}
                                 data={checklist.data}
                                 updateLists={updateLists}
