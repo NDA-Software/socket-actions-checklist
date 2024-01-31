@@ -26,7 +26,7 @@ export type reducerAction = {
     },
     indexes?: {
         list: number,
-        item: number
+        item?: number
     },
     data?: checklist[];
 }
@@ -34,28 +34,41 @@ export type reducerAction = {
 type updateSocketType = (newList: checklist[]) => void;
 
 const listReducerFactory = (updateSocket: updateSocketType) => (oldData: checklist[], { action, newTitle, newItem, indexes, data }: reducerAction): checklist[] => {
-    if (action === 'add' && newTitle !== undefined && newTitle !== '')
-        oldData.push({
-            title: newTitle,
-            data: []
-        });
+    switch (action) {
+        case 'add':
+            if (newTitle !== undefined && newTitle !== '')
+                oldData.push({
+                    title: newTitle,
+                    data: []
+                });
+            break;
 
-    if (
-        action === 'newItem' &&
-        newItem !== undefined &&
-        newItem.item.text !== ''
-    )
-        oldData[newItem.index].data.push(newItem.item);
+        case 'newItem':
+            if (newItem !== undefined && newItem.item.text !== '')
+                oldData[newItem.index].data.push(newItem.item);
+            break;
 
-    if (
-        action === 'check' &&
-        indexes !== undefined
-    )
-        oldData[indexes.list].data[indexes.item].checked = !oldData[indexes.list].data[indexes.item].checked;
+        case 'check':
+            if (indexes?.item !== undefined)
+                oldData[indexes.list].data[indexes.item].checked = !oldData[indexes.list].data[indexes.item].checked;
+            break;
 
-    if (action === 'overwrite')
-        oldData = data as checklist[];
-    else
+        case 'overwrite':
+            oldData = data as checklist[];
+            break;
+
+        case 'removeItem':
+            if (indexes?.item !== undefined)
+                oldData[indexes.list].data.splice(indexes.item, 1);
+            break;
+
+        case 'removeChecklist':
+            if (indexes !== undefined)
+                oldData.splice(indexes.list, 1);
+            break;
+    }
+
+    if (action !== 'overwrite')
         updateSocket(oldData);
 
     return [...oldData];

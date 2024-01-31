@@ -13,7 +13,7 @@ type propType = {
 export default function Checklist ({ index, title, data, updateLists }: propType): ReactElement<any, any> {
     const [newItem, setNewItem] = useState('');
 
-    const click = (): void => {
+    const clickAdd = (): void => {
         updateLists({
             action: 'newItem',
             newItem: {
@@ -28,13 +28,32 @@ export default function Checklist ({ index, title, data, updateLists }: propType
         setNewItem('');
     };
 
+    const clickRemoveItem = (itemIndex: number): void => {
+        updateLists({
+            action: 'removeItem',
+            indexes: {
+                list: index,
+                item: itemIndex
+            }
+        });
+    };
+
+    const clickRemoveChecklist = (): void => {
+        updateLists({
+            action: 'removeChecklist',
+            indexes: {
+                list: index
+            }
+        });
+    };
+
     return (
         <Sheet sx={{ flex: 'none', height: '100%', overflow: 'auto' }}>
             <List>
                 <ListItem sx={{ width: '100%', justifyContent: 'space-between' }} sticky>
                     <Typography level="h3" >{title}</Typography>
 
-                    <Button variant='soft' size="sm" color="danger" onClick={click}>X</Button>
+                    <Button variant='soft' size="sm" color="danger" onClick={clickRemoveChecklist}>X</Button>
                 </ListItem>
 
                 {data.map((item, i) => (
@@ -46,7 +65,7 @@ export default function Checklist ({ index, title, data, updateLists }: propType
                             label={item.text}
                         />
 
-                        <Button variant='plain' size="sm" color="danger" onClick={click}>X</Button>
+                        <Button variant='plain' size="sm" color="danger" onClick={() => { clickRemoveItem(i); }}>X</Button>
                     </ListItem>
                 ))}
 
@@ -54,12 +73,12 @@ export default function Checklist ({ index, title, data, updateLists }: propType
                     <Stack direction='row' spacing={1} >
                         <Input onKeyUp={(e) => {
                             if (e.key === 'Enter')
-                                click();
+                                clickAdd();
                         }} placeholder='New Item' onChange={(e) => { setNewItem(e.target.value); }} value={newItem} />
 
                         <Button
                             color="success"
-                            onClick={click}>+</Button>
+                            onClick={clickAdd}>+</Button>
                     </Stack>
                 </ListItem>
             </List>
