@@ -1,5 +1,9 @@
-import { useReducer, type ReactElement, useState } from 'react';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
+
+import { useReducer, type ReactElement, useState, useEffect } from 'react';
 import { Stack, Button, Input, Box } from '@mui/joy';
+
+import Client, { type messageReceiver } from 'socket-actions/client';
 
 import Checklist from '@/app/Checklist';
 
@@ -27,7 +31,9 @@ export type reducerAction = {
     data?: checklist[];
 }
 
-const listReducer = (oldData: checklist[], { action, newTitle, newItem, indexes }: reducerAction): checklist[] => {
+type updateSocketType = (newList: checklist[]) => void;
+
+const listReducerFactory = (updateSocket: updateSocketType) => (oldData: checklist[], { action, newTitle, newItem, indexes, data }: reducerAction): checklist[] => {
     if (action === 'add' && newTitle !== undefined && newTitle !== '')
         oldData.push({
             title: newTitle,
@@ -47,18 +53,58 @@ const listReducer = (oldData: checklist[], { action, newTitle, newItem, indexes 
     )
         oldData[indexes.list].data[indexes.item].checked = !oldData[indexes.list].data[indexes.item].checked;
 
+    if (action === 'overwrite')
+        oldData = data as checklist[];
+    else
+        updateSocket(oldData);
+
     return [...oldData];
 };
 
-export default function Home(): ReactElement<any, any> {
+let client: Client | null = null;
+
+const connect = (onMessage: messageReceiver): void => {
+    client = new Client({
+        url: 'ws://localhost:3001',
+        onMessage,
+        onClose: async () => {
+            console.log('Connection lost.');
+            console.log('Trying again in 5 seconds...');
+
+            setTimeout(() => {
+                connect(onMessage);
+            }, 5000);
+        }
+    });
+};
+
+type propType = {
+    startingLists: checklist[]
+};
+
+export default function Home({ startingLists }: propType): ReactElement<any, any> {
     const [newItem, setNewItem] = useState('');
-    const [lists, updateLists] = useReducer(listReducer, []);
+
+    const [lists, updateLists] = useReducer(listReducerFactory(
+        (updatedList) => client?.sendAction('updateCheckList', { lists: updatedList })
+    ), startingLists);
 
     const click = (): void => {
         updateLists({ newTitle: newItem, action: 'add' });
 
         setNewItem('');
     };
+
+    useEffect(() => {
+        connect(async ({ data }) => {
+            const { lists } = JSON.parse(data);
+
+            updateLists({
+                action: 'overwrite',
+                data: lists
+            });
+        });
+    }, []);
 
     return (
         <Stack direction='row' spacing={1}>
@@ -90,3 +136,22 @@ export default function Home(): ReactElement<any, any> {
         </Stack>
     );
 }
+
+export const getServerSideProps = (): Record<string, object> => {
+    let startingLists = [];
+
+    const fileName = '../../data.json';
+
+    if (!existsSync(fileName))
+        writeFileSync(fileName, '[]');
+
+    const data = readFileSync('../../data.json').toString();
+
+    startingLists = JSON.parse(data);
+
+    return {
+        props: {
+            startingLists
+        }
+    };
+};
