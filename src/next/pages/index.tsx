@@ -1,11 +1,11 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
 import { useReducer, type ReactElement, useState, useEffect } from 'react';
-import { Stack, Button, Input, Box } from '@mui/joy';
+import { Stack, Button, Input, CssVarsProvider, Sheet, CssBaseline, Typography, ListItem, List } from '@mui/joy';
 
 import Client, { type messageReceiver } from 'socket-actions/client';
 
-import Checklist from '@/app/Checklist';
+import Checklist from '@/components/Checklist';
 
 export type checklist = {
     title: string,
@@ -107,33 +107,52 @@ export default function Home({ startingLists }: propType): ReactElement<any, any
     }, []);
 
     return (
-        <Stack direction='row' spacing={1}>
-            {lists.map((checklist, i) => (
-                <Checklist
-                    title={checklist.title}
-                    key={`${i}-checklist`}
-                    index={i}
-                    data={checklist.data}
-                    updateLists={updateLists}
-                />)
-            )}
+        <CssVarsProvider defaultMode="dark">
+            <CssBaseline />
 
-            <Box>
-                <Stack direction='row' spacing={1}>
-                    <Input
-                        onKeyUp={(e) => {
-                            if (e.key === 'Enter')
-                                click();
-                        }}
-                        placeholder='New List'
-                        onChange={(e) => { setNewItem(e.target.value); }}
-                        value={newItem}
-                    />
+            <Sheet sx={{ px: 5, py: 5, height: '100vh', width: '100vw' }}>
+                <List orientation='horizontal' sx={{ width: '100%', height: '100%', overflowX: 'auto' }}>
+                    {lists.map((checklist, i) => (
+                        <ListItem sx={{ minWidth: '20%', height: '100%' }}>
+                            <Checklist
+                                title={checklist.title}
+                                key={`${i}-checklist`}
+                                index={i}
+                                data={checklist.data}
+                                updateLists={updateLists}
+                            />
+                        </ListItem>)
+                    )}
 
-                    <Button onClick={click}>+</Button>
-                </Stack>
-            </Box>
-        </Stack>
+                    <ListItem>
+                        <Sheet sx={{ flex: 'none', height: '100%', overflow: 'auto' }}>
+                            <List>
+                                <ListItem sticky>
+                                    <Typography level="h3">&nbsp;</Typography>
+                                </ListItem>
+
+                                <ListItem>
+                                    <Stack direction='row' spacing={1}>
+                                        <Input
+                                            onKeyUp={(e) => {
+                                                if (e.key === 'Enter')
+                                                    click();
+                                            }}
+                                            placeholder='New List'
+                                            onChange={(e) => { setNewItem(e.target.value); }}
+                                            value={newItem}
+                                        />
+
+                                        <Button onClick={click}>+</Button>
+                                    </Stack>
+                                </ListItem>
+                            </List>
+                        </Sheet>
+                    </ListItem>
+                </List>
+            </Sheet>
+        </CssVarsProvider>
+
     );
 }
 
