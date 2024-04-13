@@ -80,14 +80,7 @@ const connect = (onMessage: messageReceiver): void => {
     client = new Client({
         url: 'ws://localhost:3001',
         onMessage,
-        onClose: async () => {
-            console.log('Connection lost.');
-            console.log('Trying again in 5 seconds...');
-
-            setTimeout(() => {
-                connect(onMessage);
-            }, 5000);
-        }
+        connectionTryLimit: 10
     });
 };
 
@@ -117,6 +110,10 @@ export default function Home({ startingLists }: propType): ReactElement<any, any
                 data: lists
             });
         });
+
+        return () => {
+            client?.close();
+        };
     }, []);
 
     return (

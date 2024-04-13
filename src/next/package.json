@@ -16,7 +16,7 @@
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "socket-actions": "^1.1.0"
+    "socket-actions": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",

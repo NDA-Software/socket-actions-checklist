@@ -9,6 +9,7 @@ import json from '@rollup/plugin-json';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import copy from 'rollup-plugin-copy';
 import del from 'rollup-plugin-delete';
+import commonjs from '@rollup/plugin-commonjs';
 
 const packageJson = JSON.parse(readFileSync('./package.json'));
 const tsConfig = JSON.parse(readFileSync('./tsconfig.json'));
@@ -71,7 +72,8 @@ const sharedConfigs = {
     plugins: [
         nodeResolve(),
         peerDepsExternal(),
-        json()
+        json(),
+        commonjs()
     ]
 };
 

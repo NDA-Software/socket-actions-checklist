@@ -46,7 +46,7 @@
         "typescript": "^5.2.2"
     },
     "peerDependencies": {
-        "socket-actions": "^1.1.0",
+        "socket-actions": "^2.0.0",
         "ws": "^8.16.0"
     }
 }

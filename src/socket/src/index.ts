@@ -7,8 +7,12 @@ const actions = {
 };
 
 // eslint-disable-next-line no-new
-new Socket({
+const socket = new Socket({
     actions,
-    port: 3001,
-    disableAuthentication: true
+    disableAuthentication: true,
+    serverOptions: {
+        port: 3001
+    }
 });
+
+socket.start();
