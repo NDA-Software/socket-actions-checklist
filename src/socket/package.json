@@ -37,16 +37,14 @@
         "@rollup/plugin-node-resolve": "^15.1.0",
         "@rollup/plugin-typescript": "^11.1.5",
         "@types/node": "^20.5.2",
-        "@types/rollup-plugin-peer-deps-external": "^2.2.3",
         "@types/validate-npm-package-license": "^3.0.1",
         "rollup": "^3.26.2",
         "rollup-plugin-copy": "^3.5.0",
         "rollup-plugin-delete": "^2.0.0",
-        "rollup-plugin-peer-deps-external": "^2.2.4",
         "typescript": "^5.2.2"
     },
     "peerDependencies": {
-        "socket-actions": "^2.0.0",
+        "socket-actions": "^2.0.2",
         "ws": "^8.16.0"
     }
 }

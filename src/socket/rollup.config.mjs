@@ -6,10 +6,8 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import json from '@rollup/plugin-json';
 
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import copy from 'rollup-plugin-copy';
 import del from 'rollup-plugin-delete';
-import commonjs from '@rollup/plugin-commonjs';
 
 const packageJson = JSON.parse(readFileSync('./package.json'));
 const tsConfig = JSON.parse(readFileSync('./tsconfig.json'));
@@ -67,14 +65,19 @@ const { exports } = packageJson;
 
 const config = [];
 
+const external = [];
+
+for (const key in packageJson.peerDependencies)
+    external.push(key);
+
 const sharedConfigs = {
     input: 'src/index.ts',
     plugins: [
         nodeResolve(),
-        peerDepsExternal(),
         json(),
         commonjs()
-    ]
+    ],
+    external
 };
 
 const hasCjs = exports['.'].require !== undefined;
